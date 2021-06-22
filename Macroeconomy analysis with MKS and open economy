@@ -1,0 +1,216 @@
+#Macroeconomy analysis with MKS, UNSAM 2021
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+size = 7
+
+#c0+c1*(y-t(y)+tr)
+# yd=y-t(y)+tr
+# PBI y=z=c(yd)+i(y)+g+x-m
+co = 25600e6/1e6 #Ok
+c1 = 0.8 #Ok
+io=19500.48e6/1e6 #Ok
+b1 = 0.12 #Ok
+
+to=27500.4e6/1e6 #Ok
+t1 = 0.15 #Ok
+tr=17200e6/1e6 #Ok
+g=(1+0.1*0)*113539e6/1e6 #Ok
+x=73005e6/1e6 #Ok
+mo=(21400e6-15816426546*0.75*1)/1e6 #Ok
+m1=0.07 #Ok
+
+a = 1/(1-c1*(1-t1)-b1+m1)
+Ao = co-c1*to+c1*tr+io+g+x-mo
+yeq = a*Ao
+
+t = to+t1*yeq
+yd = (yeq-t+tr)
+c = co+c1*yd
+
+spr = yd - c
+spu = t-tr-g
+m = mo + m1*yeq
+bc = x-m
+s = spr+spu-bc
+so = -to+co-c1*to+to-tr-g-x-mo
+rpu = g+tr-t
+i = io+b1*yeq
+yres = (x-mo)/m1
+
+
+
+print("Multiplicador de gastos, a = {}".format(round(a,3)))
+print("Constante autonoma ,Ao = {}".format(round(Ao,3)))
+print("Ingreso de equilibrio ,PBI = {}".format(round(yeq,3)))
+print("Restricción de ingresos ,Yrest = {}".format(round(yres,3)))
+print("Ahorro de privado, spr = {}".format(round(spr,3)))
+print("Ahorro de publico ,spu = {}".format(round(spu,3)))
+if bc==0:
+	print("Balance comercial BC = {} -> Equilibrio comercial".format(round(bc,3)))
+elif bc>0:
+	print("Balance comercial BC = {} -> Superávit comercial".format(round(bc,3)))
+elif bc<0:
+	print("Balance comercial BC = {} -> Déficit comercial".format(round(bc,3)))
+
+print("Ahorro total de equilibrio s = {}".format(round(s,3)))
+print("Resultado del sector publico, rpu = {}".format(round(rpu,3)))
+
+print("Equilibrio Ahorro-Inversión s = i, {} = {} , {} ".format(round(s,3),round(i,3),s==i))
+
+
+y = np.linspace(0,1.4e12,1000)/1e6
+
+t = to+t1*y
+yd = (y-t+tr)
+c = co+c1*yd
+spr = yd - c
+spu = t-tr-g
+m = mo + m1*y
+bc = x-m
+s = spr+spu-bc
+i = io+b1*y
+z = c+i+g+x-m
+
+
+if m1 != 0:
+	gr = 3
+else:
+	gr = 2
+
+ng = 1
+
+plt.subplot(gr,1,ng)
+plt.plot(y,z,label="Demanda agregada'")
+plt.plot(y,y,'--',label="Reference")
+plt.plot(yeq+y*0,y,'--',label="Yeq'")
+plt.grid()
+plt.title("Z vs Y")
+plt.ylabel("Z [M USD]")
+plt.legend(loc=4,fontsize=size)
+ng += 1
+
+plt.subplot(gr,1,ng)
+plt.plot(y,s,label="Ahorro'")
+plt.plot(y,i,label="Inversion'")
+plt.plot(yeq+y*0,y+so,'--',label="Yeq'")
+plt.grid()
+plt.ylabel("I,S [M USD]")
+plt.title("I,S vs Y")
+plt.legend(loc=4,fontsize=size)
+
+
+if m1 != 0:
+	yres = (x-mo)/m1
+	ng +=1 
+	plt.subplot(gr,1,ng)
+	plt.plot(y,x+y*0,label="Exportaciones'")
+	plt.plot(y,m,label="Importanciones'")
+	plt.plot(yres+y*0,y,color="red",label="Restriccion de ingreso'")
+	plt.plot(yeq+y*0,y,'--',label="Yeq'")
+	plt.grid()
+	plt.title("X,M vs Y")
+	plt.ylabel("X,M [M USD]")
+	plt.xlabel("Y [M USD]")
+	plt.legend(loc=4,fontsize=size)
+
+#########################################################
+co = 25600e6/1e6 #Ok
+c1 = 0.8 #Ok
+io=19500.48e6/1e6 #Ok
+b1 = 0.12 #Ok
+
+to=27500.4e6/1e6 #Ok
+t1 = 0.15 #Ok
+tr=17200e6/1e6 #Ok
+g=(1+0.1)*113539e6/1e6 #Ok
+x=73005e6/1e6 #Ok
+mo=(21400e6-15816426546*0.75*1)/1e6 #Ok
+m1=0.07 #Ok
+
+a = 1/(1-c1*(1-t1)-b1+m1)
+Ao = co-c1*to+c1*tr+io+g+x-mo
+yeq = a*Ao
+
+t = to+t1*yeq
+yd = (yeq-t+tr)
+c = co+c1*yd
+
+spr = yd - c
+spu = t-tr-g
+m = mo + m1*yeq
+bc = x-m
+s = spr+spu-bc
+so = -to+co-c1*to+to-tr-g-x-mo
+rpu = g+tr-t
+i = io+b1*yeq
+yres = (x-mo)/m1
+
+
+
+print("\nMultiplicador de gastos, a = {}".format(round(a,3)))
+print("Constante autonoma ,Ao = {}".format(round(Ao,3)))
+print("Ingreso de equilibrio ,PBI = {}".format(round(yeq,3)))
+print("Restricción de ingresos ,Yrest = {}".format(round(yres,3)))
+print("Ahorro de privado, spr = {}".format(round(spr,3)))
+print("Ahorro de publico ,spu = {}".format(round(spu,3)))
+if bc==0:
+	print("Balance comercial BC = {} -> Equilibrio comercial".format(round(bc,3)))
+elif bc>0:
+	print("Balance comercial BC = {} -> Superávit comercial".format(round(bc,3)))
+elif bc<0:
+	print("Balance comercial BC = {} -> Déficit comercial".format(round(bc,3)))
+
+print("Ahorro total de equilibrio s = {}".format(round(s,3)))
+print("Resultado del sector publico, rpu = {}".format(round(rpu,3)))
+
+print("Equilibrio Ahorro-Inversión s = i, {} = {} , {} ".format(round(s,3),round(i,3),s==i))
+
+
+y = np.linspace(0,1.4e12,1000)/1e6
+
+t = to+t1*y
+yd = (y-t+tr)
+c = co+c1*yd
+spr = yd - c
+spu = t-tr-g
+m = mo + m1*y
+bc = x-m
+s = spr+spu-bc
+i = io+b1*y
+z = c+i+g+x-m
+
+
+if m1 != 0:
+	gr = 3
+else:
+	gr = 2
+
+ng = 1
+
+plt.subplot(gr,1,ng)
+plt.plot(y,z,label="Demanda agregada''")
+plt.plot(yeq+y*0,y,'--',label="Yeq''")
+plt.title("Z vs Y")
+plt.ylabel("Z [M USD]")
+plt.legend(loc=4,fontsize=size)
+ng += 1
+
+plt.subplot(gr,1,ng)
+plt.plot(y,s,label="Ahorro''")
+plt.plot(y,i,label="Inversion''")
+plt.plot(yeq+y*0,y+so,'--',label="Yeq''")
+plt.legend(loc=4,fontsize=size)
+
+if m1 != 0:
+	yres = (x-mo)/m1
+	ng +=1 
+	plt.subplot(gr,1,ng)
+	plt.plot(y,x+y*0,label="Exportaciones''")
+	plt.plot(y,m,label="Importanciones''")
+	plt.plot(yres+y*0,y,color="green",label="Restriccion de ingreso''")
+	plt.plot(yeq+y*0,y,'--',label="Yeq''")
+	plt.legend(loc=4,fontsize=size)
+
+plt.show()
